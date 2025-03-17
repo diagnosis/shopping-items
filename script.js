@@ -57,6 +57,18 @@ function createIcon(className) {
     icon.className = className;
     return icon;
 }
+function filterItems(e) {
+    const text = e.target.value.toLowerCase();
+    const items = list.getElementsByTagName('li');
+    Array.from(items).forEach((item) => {
+        const itemName = item.firstChild.textContent.toLowerCase();
+        if (itemName.indexOf(text) !== -1) {
+            item.style.display = 'flex';
+        } else {
+            item.style.display = 'none';
+        }
+    });
+}
 
 function checkUI() {
     if(list.children.length === 0) {
@@ -73,4 +85,5 @@ function checkUI() {
 form.addEventListener('submit', addItem);
 list.addEventListener('click', removeItem);
 clearBtn.addEventListener('click', removeAllItems);
+filter.addEventListener('keyup', filterItems);
 checkUI();
