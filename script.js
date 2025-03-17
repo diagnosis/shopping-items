@@ -3,6 +3,7 @@ const form = document.querySelector('#item-form');
 const input = document.querySelector('#item-input');
 const list = document.querySelector('.items');
 const clearBtn = document.querySelector('.btn-clear');
+const filter = document.querySelector('#filter');
 
 // Function to add an item
 const addItem = (e) => {
@@ -23,23 +24,24 @@ const addItem = (e) => {
     const icon = createIcon('fa-solid fa-xmark');
     button.appendChild(icon);
     li.appendChild(button);
-
     list.appendChild(li);
-
     form.reset(); // Clears input field
+    checkUI()
 };
 
 // Function to remove a single item (Event Delegation)
 const removeItem = (e) => {
     const removeBtn = e.target.closest('.remove-item'); // More reliable check
     if (removeBtn) {
-        removeBtn.parentElement.remove();
+        if(confirm("Are you sure?")) removeBtn.parentElement.remove();
     }
+    checkUI()
 };
 
 // Function to remove all items
 const removeAllItems = () => {
     list.innerHTML = '';
+    checkUI()
 };
 
 // Function to create a button element
@@ -56,7 +58,19 @@ function createIcon(className) {
     return icon;
 }
 
+function checkUI() {
+    if(list.children.length === 0) {
+        clearBtn.style.display = 'none';
+        filter.style.display = 'none';
+    } else {
+        clearBtn.style.display = 'block';
+        filter.style.display = 'block';
+    }
+
+}
+
 // Event Listeners
 form.addEventListener('submit', addItem);
 list.addEventListener('click', removeItem);
 clearBtn.addEventListener('click', removeAllItems);
+checkUI();
