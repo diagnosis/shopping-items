@@ -100,6 +100,7 @@ const removeOrEditItem = (e) => {
         if (confirm("Are you sure?")) li.remove();
     } else {
         // Edit mode
+        if(e.target.tagName !== 'LI') return;
         if (selectedItem) {
             selectedItem.style.color = 'black';
         }
@@ -160,6 +161,18 @@ function filterItems(e) {
         item.style.display = itemName.includes(text) ? 'flex' : 'none';
     });
 }
+// Function to cancel edit mode
+function cancelEditMode() {
+    if (selectedItem) {
+        selectedItem.classList.remove('selected');
+        selectedItem.style.color = 'black';
+    }
+    selectedItem = null;
+    isEdit = false;
+    addItemBtn.innerHTML = '<i class="fa-solid fa-plus"></i> Add Item';
+    addItemBtn.style.backgroundColor = 'black';
+    form.reset();
+}
 
 // Function to check UI visibility
 function checkUI() {
@@ -178,4 +191,10 @@ form.addEventListener('submit', onAddItem);
 list.addEventListener('click', removeOrEditItem);
 clearBtn.addEventListener('click', removeAllItems);
 filter.addEventListener('keyup', filterItems);
+document.body.addEventListener('click', (e) => {
+    // If clicked outside the list and edit mode is active
+    if (isEdit && !list.contains(e.target) && e.target !== input) {
+        cancelEditMode();
+    }
+});
 checkUI();
